@@ -1,8 +1,14 @@
+using Microsoft.VisualBasic.CompilerServices;
+using System.Security.Principal;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace Domain;
+
 public class Grid
 {
-    private int _size;
-    public int[,] _grid { get; set; } = new int[0, 0];
-    private Random _random = new Random();
+    private readonly int _size;
+    public readonly int[,] _grid; // TODO: Encapsulate
+    private readonly Random _random = new Random();
 
     public Grid(ushort size, Difficulty difficulty)
     {
@@ -67,4 +73,19 @@ public class Grid
 
         _grid[rowIndex, colIndex]++;
     }
+}
+
+public class Cell
+{
+    public int Count { get; set; } = 0;
+    public bool Revealed { get; set; } = false;
+
+    public static Cell operator ++(Cell x)
+    {
+        x.Count += 1;
+        return x;
+    }
+
+    public static implicit operator int(Cell x) => x.Count;
+    public static implicit operator Cell(int number) => new() { Count = number };
 }
