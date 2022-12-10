@@ -11,7 +11,7 @@ for (int i = 0; i < 10; i++)
 {
     for (int j = 0; j < 10; j++)
     {
-        int num = game.Grid._grid[i,j];
+        int num = game.Grid.Cells[i,j];
         Console.Write(num < 0 ? "x" : num == 0 ? ' ' : num.ToString());
     }
     Console.WriteLine();

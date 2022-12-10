@@ -6,38 +6,55 @@ namespace Domain;
 
 public class Grid
 {
+    public int RemainingBombCount => 0;
+    public int StartingGiftCount { get; }
+    public int TotalSpaceCount => Cells.Length;
+    public int RevealedSpaceCount => 0;
+
     private readonly int _size;
-    public readonly int[,] _grid; // TODO: Encapsulate
+    private Difficulty _difficulty;
+    public Cell[,] Cells { get; }
     private readonly Random _random = new Random();
 
     public Grid(ushort size, Difficulty difficulty)
     {
         _size = size;
+        _difficulty = difficulty;
+        Cells = CreateCells(size);
 
-        _grid = new int[size,size];
+        StartingGiftCount = (int)(Cells.Length * ((double)_difficulty / 100));
 
         FillWithGifts(difficulty);
 
         SetHintValues(size);
+
+
+    }
+
+    private static Cell[,] CreateCells(ushort size)
+    {
+        Cell[,] cells = new Cell[size, size];
+        for (int rowIndex = 0; rowIndex < cells.GetLength(0); rowIndex++)
+        {
+            for (int colIndex = 0; colIndex < cells.GetLength(1); colIndex++)
+            {
+                cells[rowIndex, colIndex] = new Cell();
+            }
+        }
+        return cells;
     }
 
     private void FillWithGifts(Difficulty difficulty)
     {
-        int giftCount = (int)(_grid.Length * ((double)difficulty / 100));
-        var possibles = Enumerable.Range(0, _grid.Length).ToArray();
-        var locations = possibles.OrderBy(x => _random.Next()).Take(giftCount);
+        var possibles = Enumerable.Range(0, Cells.Length).ToArray();
+        var locations = possibles.OrderBy(x => _random.Next()).Take(StartingGiftCount);
 
         foreach (var index in locations)
         {
-            _grid[index % _size, index / _size] = _random.Next(-5, 0);
+            Cells[index % _size, index / _size] = -1;
         }
     }
 
-
-    public bool IsGift(int rowIndex, int colIndex)
-    {
-        return ((int)_grid.GetValue(rowIndex, colIndex)) < 0;
-    }
 
     private void SetHintValues(ushort size)
     {
@@ -45,7 +62,7 @@ public class Grid
         {
             for (int colIndex = 0; colIndex < size; colIndex++)
             {
-                if (IsGift(rowIndex, colIndex))
+                if (Cells[rowIndex, colIndex].IsGift)
                 {
                     SafeIncrement(rowIndex-1, colIndex);
                     SafeIncrement(rowIndex+1, colIndex);
@@ -71,21 +88,11 @@ public class Grid
             return;
         }
 
-        _grid[rowIndex, colIndex]++;
+        Cells[rowIndex, colIndex]++;
     }
-}
 
-public class Cell
-{
-    public int Count { get; set; } = 0;
-    public bool Revealed { get; set; } = false;
-
-    public static Cell operator ++(Cell x)
+    internal bool OnlyGiftsLeft()
     {
-        x.Count += 1;
-        return x;
+        return Cells.Where(x => !x.Revealed).All(x => x.IsGift);
     }
-
-    public static implicit operator int(Cell x) => x.Count;
-    public static implicit operator Cell(int number) => new() { Count = number };
 }
