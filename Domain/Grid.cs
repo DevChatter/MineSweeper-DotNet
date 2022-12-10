@@ -6,10 +6,10 @@ namespace Domain;
 
 public class Grid
 {
-    public int RemainingBombCount => 0;
+    public int RemainingBombCount => Cells.Count(cell => cell.Number < 0);
     public int StartingGiftCount { get; }
     public int TotalSpaceCount => Cells.Length;
-    public int RevealedSpaceCount => 0;
+    public int RevealedSpaceCount => Cells.Count(cell => cell.Revealed);
 
     private readonly int _size;
     private Difficulty _difficulty;
@@ -24,7 +24,7 @@ public class Grid
 
         StartingGiftCount = (int)(Cells.Length * ((double)_difficulty / 100));
 
-        FillWithGifts(difficulty);
+        FillWithGifts();
 
         SetHintValues(size);
 
@@ -44,7 +44,7 @@ public class Grid
         return cells;
     }
 
-    private void FillWithGifts(Difficulty difficulty)
+    private void FillWithGifts()
     {
         var possibles = Enumerable.Range(0, Cells.Length).ToArray();
         var locations = possibles.OrderBy(x => _random.Next()).Take(StartingGiftCount);
@@ -80,15 +80,29 @@ public class Grid
 
     private void SafeIncrement(int rowIndex, int colIndex)
     {
-        if (rowIndex < 0
-            || colIndex < 0
-            || rowIndex >= _size
-            || colIndex >= _size)
+        if (IsOutOfBounds(rowIndex, colIndex))
         {
             return;
         }
 
         Cells[rowIndex, colIndex]++;
+    }
+
+    public Cell? SafeGet(int rowIndex, int colIndex)
+    {
+        if (IsOutOfBounds(rowIndex, colIndex))
+        {
+            return null;
+        }
+        return Cells[rowIndex, colIndex];
+    }
+
+    private bool IsOutOfBounds(int rowIndex, int colIndex)
+    {
+        return rowIndex < 0
+                    || colIndex < 0
+                    || rowIndex >= _size
+                    || colIndex >= _size;
     }
 
     internal bool OnlyGiftsLeft()

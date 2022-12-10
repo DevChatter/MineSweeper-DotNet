@@ -6,6 +6,18 @@ public class Cell
     public bool Revealed { get; private set; } = false;
     public bool IsGift => Number < 0;
 
+    public string DisplayText
+    {
+        get
+        {
+            if (Revealed)
+            {
+                return Number >= 0 ? Number.ToString() : "X";
+            }
+            return " ";
+        }
+    }
+
     internal void Reveal()
     {
         Revealed = true;
