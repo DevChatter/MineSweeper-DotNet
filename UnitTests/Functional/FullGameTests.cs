@@ -11,16 +11,7 @@ public class FullGameTests
         _game.Start(4, Difficulty.Reindeer);
         _game.State.Should().Be(GameState.Started);
 
-        for (int rowIndex = 0; rowIndex < 4; rowIndex++)
-        {
-            for (int colIndex = 0; colIndex < 4; colIndex++)
-            {
-                if (!_game.Grid.Cells[rowIndex, colIndex].IsGift)
-                {
-                    _game.Reveal(rowIndex, colIndex);
-                }
-            }
-        }
+        ClickAllNonBombs();
 
         _game.State.Should().Be(GameState.Won);
     }
@@ -34,18 +25,44 @@ public class FullGameTests
         ClickBmob();
 
         _game.State.Should().Be(GameState.Lost);
+    }
 
-        void ClickBmob()
+    public void GameUnchangableAfterBombCLick()
+    {
+        _game.State.Should().Be(GameState.NotStarted);
+        _game.Start(4, Difficulty.Reindeer);
+        _game.State.Should().Be(GameState.Started);
+        ClickBmob();
+        _game.State.Should().Be(GameState.Lost);
+        ClickAllNonBombs();
+        _game.State.Should().Be(GameState.Lost);
+        _game.Grid.Cells.Count(cell => !cell.Revealed).Should().BeGreaterThan(0);
+    }
+
+    private void ClickAllNonBombs()
+    {
+        for (int rowIndex = 0; rowIndex < 4; rowIndex++)
         {
-            for (int rowIndex = 0; rowIndex < 4; rowIndex++)
+            for (int colIndex = 0; colIndex < 4; colIndex++)
             {
-                for (int colIndex = 0; colIndex < 4; colIndex++)
+                if (!_game.Grid.Cells[rowIndex, colIndex].IsGift)
                 {
-                    if (_game.Grid.Cells[rowIndex, colIndex].IsGift)
-                    {
-                        _game.Reveal(rowIndex, colIndex);
-                        return;
-                    }
+                    _game.Reveal(rowIndex, colIndex);
+                }
+            }
+        }
+    }
+
+    private void ClickBmob()
+    {
+        for (int rowIndex = 0; rowIndex < 4; rowIndex++)
+        {
+            for (int colIndex = 0; colIndex < 4; colIndex++)
+            {
+                if (_game.Grid.Cells[rowIndex, colIndex].IsGift)
+                {
+                    _game.Reveal(rowIndex, colIndex);
+                    return;
                 }
             }
         }
