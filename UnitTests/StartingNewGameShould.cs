@@ -12,7 +12,7 @@ public class StartingNewGameShould
     [InlineData(50)]
     public void CreatesGridOfCorrectSize(ushort size)
     {
-        _game.Start(size, Difficulty.Reindeer);
+        _game.Start(size, Difficulty.Easy);
         // TODO: Test something
     }
 }

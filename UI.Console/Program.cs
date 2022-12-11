@@ -11,7 +11,7 @@ internal class Program
         Console.WriteLine("Hello, World!");
 
         var game = new Game();
-        game.Start(SideSize, Difficulty.Reindeer);
+        game.Start(SideSize, Difficulty.Easy);
 
         while (game.State == GameState.Started)
         {

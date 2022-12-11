@@ -8,7 +8,7 @@ public class FullGameTests
     public void ClearAllSpacesSafely()
     {
         _game.State.Should().Be(GameState.NotStarted);
-        _game.Start(4, Difficulty.Reindeer);
+        _game.Start(4, Difficulty.Easy);
         _game.State.Should().Be(GameState.Started);
 
         ClickAllNonBombs();
@@ -20,7 +20,7 @@ public class FullGameTests
     public void ClickBombFirst()
     {
         _game.State.Should().Be(GameState.NotStarted);
-        _game.Start(4, Difficulty.Reindeer);
+        _game.Start(4, Difficulty.Easy);
         _game.State.Should().Be(GameState.Started);
         ClickBomb();
 
@@ -31,7 +31,7 @@ public class FullGameTests
     public void GameUnplayableAfterBombCLick()
     {
         _game.State.Should().Be(GameState.NotStarted);
-        _game.Start(4, Difficulty.Reindeer);
+        _game.Start(4, Difficulty.Easy);
         _game.State.Should().Be(GameState.Started);
         ClickBomb();
         _game.State.Should().Be(GameState.Lost);

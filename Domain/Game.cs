@@ -4,7 +4,7 @@ namespace Domain;
 
 public class Game
 {
-    public Grid Grid { get; set; } = new (0, Difficulty.Elf);
+    public Grid Grid { get; set; } = new (0, Difficulty.Medium);
     public GameState State { get; set; } = GameState.NotStarted;
 
     public void Start(ushort size, Difficulty difficulty)

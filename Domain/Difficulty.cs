@@ -1,6 +1,6 @@
 public enum Difficulty
 {
-    Reindeer = 10,
-    Elf = 15,
-    Snowman = 25,
+    Easy = 10,
+    Medium = 15,
+    Hard = 25,
 }
