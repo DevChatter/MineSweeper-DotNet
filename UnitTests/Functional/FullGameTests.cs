@@ -22,17 +22,18 @@ public class FullGameTests
         _game.State.Should().Be(GameState.NotStarted);
         _game.Start(4, Difficulty.Reindeer);
         _game.State.Should().Be(GameState.Started);
-        ClickBmob();
+        ClickBomb();
 
         _game.State.Should().Be(GameState.Lost);
     }
 
-    public void GameUnchangableAfterBombCLick()
+    [Fact]
+    public void GameUnplayableAfterBombCLick()
     {
         _game.State.Should().Be(GameState.NotStarted);
         _game.Start(4, Difficulty.Reindeer);
         _game.State.Should().Be(GameState.Started);
-        ClickBmob();
+        ClickBomb();
         _game.State.Should().Be(GameState.Lost);
         ClickAllNonBombs();
         _game.State.Should().Be(GameState.Lost);
@@ -53,7 +54,7 @@ public class FullGameTests
         }
     }
 
-    private void ClickBmob()
+    private void ClickBomb()
     {
         for (int rowIndex = 0; rowIndex < 4; rowIndex++)
         {
