@@ -4,7 +4,7 @@ public class Cell
 {
     public int Number { get; private set; } = 0;
     public bool Revealed { get; private set; } = false;
-    public bool IsGift => Number < 0;
+    public bool IsBomb => Number < 0;
 
     public string DisplayText
     {

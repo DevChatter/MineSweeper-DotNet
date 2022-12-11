@@ -21,11 +21,11 @@ public class Game
         if (cell == null) return;
 
         cell.Reveal();
-        if (cell.IsGift)
+        if (cell.IsBomb)
         {
             State = GameState.Lost;
         }
-        else if (Grid.OnlyGiftsLeft())
+        else if (Grid.OnlyBombsLeft())
         {
             State = GameState.Won;
         }

@@ -46,7 +46,7 @@ public class FullGameTests
         {
             for (int colIndex = 0; colIndex < 4; colIndex++)
             {
-                if (!_game.Grid.Cells[rowIndex, colIndex].IsGift)
+                if (!_game.Grid.Cells[rowIndex, colIndex].IsBomb)
                 {
                     _game.Reveal(rowIndex, colIndex);
                 }
@@ -60,7 +60,7 @@ public class FullGameTests
         {
             for (int colIndex = 0; colIndex < 4; colIndex++)
             {
-                if (_game.Grid.Cells[rowIndex, colIndex].IsGift)
+                if (_game.Grid.Cells[rowIndex, colIndex].IsBomb)
                 {
                     _game.Reveal(rowIndex, colIndex);
                     return;

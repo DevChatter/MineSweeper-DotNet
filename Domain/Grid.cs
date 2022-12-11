@@ -7,7 +7,7 @@ namespace Domain;
 public class Grid
 {
     public int RemainingBombCount => Cells.Count(cell => cell.Number < 0);
-    public int StartingGiftCount { get; }
+    public int StartingBombCount { get; }
     public int TotalSpaceCount => Cells.Length;
     public int RevealedSpaceCount => Cells.Count(cell => cell.Revealed);
 
@@ -22,9 +22,9 @@ public class Grid
         _difficulty = difficulty;
         Cells = CreateCells(size);
 
-        StartingGiftCount = (int)(Cells.Length * ((double)_difficulty / 100));
+        StartingBombCount = (int)(Cells.Length * ((double)_difficulty / 100));
 
-        FillWithGifts();
+        FillWithBombs();
 
         SetHintValues(size);
 
@@ -44,10 +44,10 @@ public class Grid
         return cells;
     }
 
-    private void FillWithGifts()
+    private void FillWithBombs()
     {
         var possibles = Enumerable.Range(0, Cells.Length).ToArray();
-        var locations = possibles.OrderBy(x => _random.Next()).Take(StartingGiftCount);
+        var locations = possibles.OrderBy(x => _random.Next()).Take(StartingBombCount);
 
         foreach (var index in locations)
         {
@@ -62,7 +62,7 @@ public class Grid
         {
             for (int colIndex = 0; colIndex < size; colIndex++)
             {
-                if (Cells[rowIndex, colIndex].IsGift)
+                if (Cells[rowIndex, colIndex].IsBomb)
                 {
                     SafeIncrement(rowIndex-1, colIndex);
                     SafeIncrement(rowIndex+1, colIndex);
@@ -105,8 +105,8 @@ public class Grid
                     || colIndex >= _size;
     }
 
-    internal bool OnlyGiftsLeft()
+    internal bool OnlyBombsLeft()
     {
-        return Cells.Where(x => !x.Revealed).All(x => x.IsGift);
+        return Cells.Where(x => !x.Revealed).All(x => x.IsBomb);
     }
 }
